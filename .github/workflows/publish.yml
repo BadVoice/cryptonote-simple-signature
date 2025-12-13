@@ -1,4 +1,4 @@
-name: Publish cryptonote-simple-signature Lib
+name: Publish to npm
 
 on:
   push:
@@ -12,14 +12,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-          registry-url: https://registry.npmjs.org
+          registry-url: 'https://registry.npmjs.org'
 
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
-      - run: npm publish --access public
+      - name: Build
+        run: yarn build
+
+      - name: Publish to npm
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
